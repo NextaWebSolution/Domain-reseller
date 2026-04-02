@@ -1,0 +1,36 @@
+{
+    "schema": "1.0",
+    "type": "whmcs-registrars",
+    "name": "domainreseller",
+    "license": "MIT",
+    "category": "registrar",
+    "description": {
+        "name": "The PowerHost",
+        "tagline": "Official Domain Reseller Registrar Module by The PowerHost — Sell domains seamlessly through your WHMCS.",
+        "long": "The PowerHost Domain Reseller Module allows you to register, transfer, renew, and manage domains directly from your WHMCS using The PowerHost API. Features include auto nameserver sync after registration, default contact override, TLD pricing import, balance monitoring, and low balance alerts.",
+        "features": [
+            "Domain registration, transfer and renewal",
+            "Automatic nameserver sync after registration",
+            "Default contact override for all domains",
+            "Live TLD pricing import with markup support",
+            "Reseller balance monitoring and low balance alerts",
+            "Domain lock, EPP code retrieval and domain sync"
+        ]
+    },
+    "logo": {
+        "filename": "logo.png"
+    },
+    "support": {
+        "homepage": "https:\/\/thepowerhost.in\/",
+        "learn_more": "https:\/\/thepowerhost.in\/",
+        "email": "support@thepowerhost.in",
+        "support_url": "https:\/\/thepowerhost.in\/",
+        "docs_url": "https:\/\/thepowerhost.in\/"
+    },
+    "authors": [
+        {
+            "name": "The PowerHost",
+            "homepage": "https:\/\/thepowerhost.in\/"
+        }
+    ]
+}
