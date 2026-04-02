@@ -1,80 +1,43 @@
-# The PowerHost — Domain Reseller Module
+# The PowerHost — Domain Reseller Module for WHMCS
 
-**Version:** 2.1.7 &nbsp;|&nbsp; **WHMCS:** 7.0+ &nbsp;|&nbsp; **PHP:** 7.4+ &nbsp;|&nbsp; **Status:** Production Ready ✅  
-**Official Website:** [https://thepowerhost.in/](https://thepowerhost.in/)
-
----
-
-## What Is This?
-
-This is the **official WHMCS Registrar Module** by **The PowerHost**, allowing you to resell domains from The PowerHost API directly through your own WHMCS installation.
-
-```
-Your Customer → Your WHMCS → The PowerHost API → Domain Registry
-```
-
-1. Customer orders a domain through your WHMCS
-2. Your WHMCS forwards the request to The PowerHost API
-3. The API registers the domain and deducts from your reseller balance
-4. Nameservers are automatically pushed to the registry right after registration
-5. Your customer gets their domain — seamlessly and transparently
+**Version:** 2.1.7 &nbsp;|&nbsp; **WHMCS:** 7.0+ &nbsp;|&nbsp; **PHP:** 7.4+  
+**Website:** [https://thepowerhost.in/](https://thepowerhost.in/)
 
 ---
 
-## Two Modules, Two Roles
+## Introduction
 
-| Side | Module | Installed On |
-|------|--------|-------------|
-| **Provider** | Domain Reseller API Addon | The PowerHost WHMCS |
-| **Client** | This Module ← | **Your WHMCS** |
+Thank you for choosing **The PowerHost Domain Reseller Module**. This module connects your WHMCS to our domain API, allowing you to sell domains to your own customers under your own brand — fully automated, no manual work required.
 
-You are installing the **client-side module** on your own WHMCS.
+Once installed and configured, your WHMCS will handle domain registrations, transfers, renewals, and all management tasks automatically through our platform.
 
 ---
 
-## Features
+## What You Can Do With This Module
 
-| Feature | Status | Notes |
-|---------|--------|-------|
-| Domain Registration | ✅ | Full EPP contact support |
-| Domain Transfer | ✅ | With EPP code |
-| Domain Renewal | ✅ | |
-| Nameserver Management | ✅ | Get & Save |
-| **Auto Nameserver Sync** | ✅ | **Pushed instantly after registration** |
-| Domain Lock / Unlock | ✅ | |
-| EPP Code Retrieval | ✅ | |
-| Domain Sync (Cron) | ✅ | Expiry date & status |
-| Availability Check | ✅ | WHMCS 7.10+ |
-| TLD Pricing Import | ✅ | Auto-imports wholesale prices |
-| Balance Monitoring | ✅ | Dashboard widget |
-| Low Balance Alerts | ✅ | Warning when balance < $50 |
-| **Default Contact** | ✅ | **Override registrant details globally** |
-| Debug / Test Mode | ✅ | Module log integration |
+- Sell domain registrations, transfers, and renewals to your customers
+- Manage nameservers, domain locks, and EPP codes from within WHMCS
+- Import our live TLD pricing directly into your WHMCS and add your own markup
+- Monitor your reseller account balance from the WHMCS admin dashboard
+- Set a single default contact for all domain registrations if needed
 
 ---
 
-## What's New in v2.1.7
+## Requirements
 
-### Default Contact
-A new **Default Contact** option is available in the registrar settings. When enabled, a single fixed contact (name, address, phone, email) is sent to the registry for **all** domain registrations and transfers — overriding each individual customer's own contact details. When disabled, the customer's original WHMCS contact details are used as normal.
-
-**Use case:** Resellers who must register all domains under a single corporate contact for compliance or privacy reasons.
-
-### Auto Nameserver Sync
-After every successful domain registration, the module automatically fires a nameserver update to the API via the `AfterRegistrarRegistration` WHMCS hook — no cron configuration needed. This ensures nameservers are always pushed to the registry immediately, even if the upstream API doesn't apply them during the initial registration call.
+- WHMCS 7.0 or higher
+- PHP 7.4 or higher
+- cURL enabled on your server
+- An active reseller account at [thepowerhost.in](https://thepowerhost.in/)
+- Your API Key and API Secret from our portal
 
 ---
 
-## Quick Start
+## Installation
 
-### Step 1 — Get API Credentials
+### Step 1 — Upload the Module Files
 
-Log in to your reseller account at [thepowerhost.in](https://thepowerhost.in/) and retrieve:
-- API URL
-- API Key
-- API Secret
-
-### Step 2 — Upload the Module
+Upload the contents of this package to your WHMCS server, keeping the folder structure exactly as provided:
 
 ```
 /modules/registrars/domainreseller/domainreseller.php
@@ -83,213 +46,154 @@ Log in to your reseller account at [thepowerhost.in](https://thepowerhost.in/) a
 /modules/registrars/domainreseller/hooks/nameserver_autoupdate.php
 ```
 
-### Step 3 — Activate & Configure
+### Step 2 — Activate the Module
 
-1. WHMCS Admin → **Setup → Domain Registrars**
-2. Find **"The PowerHost"** → click **Activate**
-3. Enter your **API URL**, **API Key**, and **API Secret**
-4. Click **"Test Connection"** to verify
-5. *(Optional)* Enable **Default Contact** and fill in the contact fields
+1. Log in to your **WHMCS Admin Panel**
+2. Go to **Setup → Domain Registrars**
+3. Find **"The PowerHost"** and click **Activate**
+
+### Step 3 — Enter Your API Credentials
+
+Once activated, click **Configure** and fill in the following:
+
+| Field | What to Enter |
+|-------|---------------|
+| API URL | Provided in your reseller portal |
+| API Key | Provided in your reseller portal |
+| API Secret | Provided in your reseller portal |
+
+Click **"Test Connection"** — you should see a success message with your current balance.
 
 ### Step 4 — Import TLD Pricing
 
-1. **Setup → Domain Pricing**
-2. Select registrar: **"The PowerHost"**
-3. Click **"Import Pricing"**
-4. Add your markup to each TLD price
+1. Go to **Setup → Domain Pricing**
+2. Select **"The PowerHost"** as the registrar
+3. Click **"Import Pricing"** to pull our latest wholesale prices
+4. Set your own selling price for each TLD
 
-### Step 5 — Start Selling
+### Step 5 — You're Ready
 
-Set your TLDs to auto-register via **"The PowerHost"** and you're live.
+Your WHMCS is now connected. Customers can search, order, and manage domains through your site, and everything is handled automatically in the background.
 
 ---
 
-## Default Contact — Configuration
+## Configuration Options
 
-Navigate to **Setup → Domain Registrars → The PowerHost → Configure**.
+### General Settings
 
 | Setting | Description |
 |---------|-------------|
-| **Enable Default Contact** | Toggle on to activate; toggle off to use customer details |
-| Default First Name | Registrant first name |
-| Default Last Name | Registrant last name |
-| Default Company Name | Optional company name |
-| Default Address Line 1 | Street address |
-| Default Address Line 2 | Suite / unit (optional) |
-| Default City | City |
-| Default State / Region | State or region |
-| Default Postcode | Postal / ZIP code |
-| Default Country Code | Two-letter ISO code (e.g. `IN`, `US`, `GB`) |
-| Default Phone Number | Full international format — e.g. `+91.9876543210` |
-| Default Email Address | Registrant contact email |
+| Test Mode | Logs all API activity for debugging without affecting live operations |
+| Debug Mode | Writes detailed logs to WHMCS Module Log — disable in production |
 
-> **When disabled:** customer's WHMCS profile details are used for every registration and transfer (original behaviour).  
-> **When enabled:** the fields above replace the customer's details for every registration and transfer.
+### Default Contact (Optional)
 
----
+By default, each customer's own WHMCS contact details are used when registering or transferring a domain. If you'd prefer all domains to be registered under a single contact (for example, your company's details), you can enable the Default Contact feature.
 
-## Auto Nameserver Sync — How It Works
+**To enable:**  
+Go to **Setup → Domain Registrars → The PowerHost → Configure**  
+Set **"Enable Default Contact"** to **Yes** and fill in the fields below.
 
-The file `hooks/nameserver_autoupdate.php` registers a single WHMCS hook:
+| Field | Description |
+|-------|-------------|
+| First Name | Registrant first name |
+| Last Name | Registrant last name |
+| Company Name | Optional |
+| Address Line 1 | Street address |
+| Address Line 2 | Suite / unit (optional) |
+| City | City |
+| State / Region | State or province |
+| Postcode | Postal / ZIP code |
+| Country Code | Two-letter code — e.g. `IN`, `US`, `GB` |
+| Phone Number | International format — e.g. `+91.9876543210` |
+| Email Address | Contact email |
 
-**`AfterRegistrarRegistration`** — fires immediately after WHMCS records a successful domain registration. It reads the nameservers stored against the domain in `tbldomains` and calls `SaveNameservers` on The PowerHost API. The result (success or failure) is written to the WHMCS activity log under the label `[The PowerHost] Auto-NS`.
-
-No cron job or manual intervention is required. WHMCS loads all PHP files in a registrar module's `hooks/` folder automatically.
-
----
-
-## Files
-
-```
-domainreseller/
-├── domainreseller.php                  # Core registrar module
-├── clientarea.tpl                      # Branded client area template
-├── hooks/
-│   ├── balance_monitor.php             # Admin dashboard balance widget & alerts
-│   └── nameserver_autoupdate.php       # Auto nameserver push after registration
-├── INSTALLATION.md                     # Full step-by-step installation guide
-├── QUICKSTART.md                       # Quick reference card
-├── CLIENT_MODULE_SUMMARY.md            # Technical function summary
-└── README.md                           # This file
-```
+> Leave **"Enable Default Contact"** set to **No** to use each customer's own details (recommended for most resellers).
 
 ---
 
-## Admin Panel
+## Features Overview
 
-### Custom Buttons (per domain)
+### Auto Nameserver Sync
+
+When a domain is successfully registered, nameservers are automatically updated on our end right away — no cron job needed. This is handled silently in the background.
+
+### Balance Monitoring
+
+Your reseller balance is displayed on the WHMCS admin dashboard. A warning alert will appear if your balance drops below $50 so you can top up before any orders are affected.
+
+### Admin Quick Actions
+
+On any domain's admin page you will find two buttons:
 
 | Button | Action |
 |--------|--------|
-| Test Connection | Pings the API and returns current balance |
-| Check Balance | Returns your live reseller balance |
-
-### Dashboard Widget
-
-- Displays current reseller balance
-- Shows a **red warning** when balance drops below $50
-- Updates on every admin dashboard load
+| Test Connection | Verifies your API connection and shows current balance |
+| Check Balance | Displays your live reseller balance |
 
 ---
 
-## Balance Management
+## Managing Your Balance
 
-### Checking Your Balance
-- Admin dashboard widget (auto-refreshes)
-- **Check Balance** button on any domain page
-- Client area page for the registrar
+Your reseller balance is pre-funded. Each domain order deducts the wholesale cost from your balance automatically.
 
-### Adding Funds
-
-Funds **cannot** be added through your WHMCS. To top up:
-
+**To add funds:**
 1. Log in to [thepowerhost.in](https://thepowerhost.in/)
-2. Navigate to **Billing → Add Funds**
-3. Complete payment — balance updates immediately
+2. Go to **Billing → Add Funds**
+3. Complete the payment — your balance updates instantly
 
-### Low Balance Behaviour
-
-- A warning banner appears in the admin dashboard when balance < $50
-- Domain orders will fail at the API level if balance is insufficient
-- Monitor your usage and top up proactively
-
----
-
-## Security
-
-| Item | Handling |
-|------|----------|
-| API Key | Stored in plain text — safe to display, used for identification only |
-| API Secret | Stored **encrypted** in `tblregistrars` — never displayed after entry |
-| HTTPS | Always use an HTTPS API URL |
-| Debug Mode | Disable in production; logs may contain sensitive domain data |
-
-If your credentials are ever compromised:
-1. Log in to [thepowerhost.in](https://thepowerhost.in/)
-2. Regenerate your API Key and Secret
-3. Update the values in your WHMCS registrar configuration
+> Funds cannot be added through your WHMCS. Always ensure you have sufficient balance before running promotions or expecting a high volume of orders.
 
 ---
 
 ## Troubleshooting
 
-### "API Connection Error"
-- Confirm the API URL is correct and reachable
-- Verify cURL is enabled on your server (`phpinfo()`)
-- Check for firewall rules blocking outbound HTTPS
+### Test Connection fails
+- Double-check your API URL, Key, and Secret — copy-paste directly from the portal
+- Make sure your server can reach our API over HTTPS (port 443)
 
-### "Authentication Failed" / HTTP 401
-- Re-enter your API Key and Secret — copy-paste directly from the portal
-- Ensure no trailing spaces in the credentials
-- Try regenerating credentials at [thepowerhost.in](https://thepowerhost.in/)
+### Domains not registering
+- Check your balance — go to **Check Balance** on any domain page
+- Check **Utilities → Logs → Module Log** for error details
+- Enable **Debug Mode** temporarily to see the full API response
 
-### "Insufficient Credit Balance" / HTTP 402
-- Add funds via the reseller portal
-- Use **Check Balance** to confirm current amount
+### Nameservers not updating after registration
+- Confirm the file `hooks/nameserver_autoupdate.php` is present
+- Check **Utilities → Logs → Activity Log** and search for `The PowerHost Auto-NS`
 
-### Nameservers Not Updating After Registration
-- Confirm `hooks/nameserver_autoupdate.php` is present in the `hooks/` directory
-- Check **Utilities → Logs → Activity Log** for `[The PowerHost] Auto-NS` entries
-- Enable **Debug Mode** and check **Utilities → Logs → Module Log**
-
-### Default Contact Not Being Applied
-- Confirm **Enable Default Contact** is set to **Yes** in registrar settings
-- Ensure all required fields (name, address, country, phone, email) are filled in
-- Save the configuration and test a new registration
-
-### Enabling Debug Logs
-1. Registrar config → set **Debug Mode** to **Yes**
-2. Reproduce the issue
-3. Check: **Utilities → Logs → Module Log** — filter by `domainreseller`
+### Default Contact not being used
+- Confirm **Enable Default Contact** is set to **Yes** and saved
+- Make sure all required fields (name, address, country, phone, email) are filled in
 
 ---
 
-## Requirements
+## Files Included
 
-- WHMCS 7.0 or higher (7.10+ for availability checking)
-- PHP 7.4 or higher
-- cURL extension enabled
-- Active reseller account at [thepowerhost.in](https://thepowerhost.in/)
-- Valid API credentials
-
----
-
-## FAQ
-
-**Q: Where do I get my API credentials?**  
-A: From your reseller dashboard at [thepowerhost.in](https://thepowerhost.in/).
-
-**Q: Can I see my API Secret after saving it?**  
-A: No. It is stored encrypted and never displayed. If you lose it, regenerate a new one from the portal.
-
-**Q: Will customers know I'm using a reseller?**  
-A: No. The domain ordering and management experience is identical to any native WHMCS registrar.
-
-**Q: What happens if my balance runs out mid-order?**  
-A: The API returns an insufficient-balance error; the domain will not be registered and WHMCS will mark the order as failed.
-
-**Q: Do I need to configure a cron job for nameserver sync?**  
-A: No. Nameservers are pushed automatically via the `AfterRegistrarRegistration` hook the moment registration succeeds.
-
-**Q: Can I use Default Contact for only some TLDs?**  
-A: Not natively — the setting applies globally. If you need per-TLD behaviour, contact [The PowerHost support](https://thepowerhost.in/).
-
-**Q: Can I test the module without spending real money?**  
-A: Enable **Test Mode** to log all API calls. Note that live operations still consume real balance.
+```
+domainreseller/
+├── domainreseller.php              # Core module
+├── clientarea.tpl                  # Client area display template
+├── hooks/
+│   ├── balance_monitor.php         # Balance widget and low-balance alerts
+│   └── nameserver_autoupdate.php   # Automatic nameserver sync after registration
+├── INSTALLATION.md                 # Extended installation reference
+├── QUICKSTART.md                   # Quick setup card
+└── README.md                       # This file
+```
 
 ---
 
 ## Support
 
-For any issues with this module, your reseller account, or API access:
+If you need help with this module or your reseller account, please reach out to us:
 
-🌐 **Website:** [https://thepowerhost.in/](https://thepowerhost.in/)
+🌐 **[https://thepowerhost.in/](https://thepowerhost.in/)**
 
 ---
 
 ## License
 
-MIT License — free to use, modify, and distribute.
+MIT License — you are free to use and modify this module for your own WHMCS installation.
 
 ---
 
