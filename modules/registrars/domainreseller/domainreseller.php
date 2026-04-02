@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Domain Reseller - Registrar Module (Client Side)
  * This module allows WHMCS installations to resell domains from a Domain Reseller API provider
@@ -22,7 +23,8 @@ use WHMCS\Results\ResultsList;
 /**
  * Define module metadata
  */
-function domainreseller_MetaData() {
+function domainreseller_MetaData()
+{
     return [
         'DisplayName'   => 'The PowerHost',
         'APIVersion'    => '1.1',
@@ -41,7 +43,8 @@ function domainreseller_MetaData() {
  *   DefaultFirstname … DefaultEmail — the contact fields that override the
  *   customer's own details when the toggle is ON.
  */
-function domainreseller_getConfigArray() {
+function domainreseller_getConfigArray()
+{
     return [
 
         // ── Core credentials ──────────────────────────────────────────────
@@ -53,13 +56,14 @@ function domainreseller_getConfigArray() {
             'Type'  => 'System',
             'Value' => 'Official Domain Reseller module by The PowerHost — v2.1.7 | https://thepowerhost.in/',
         ],
+
         'ApiUrl' => [
             'FriendlyName' => 'API URL',
-            'Type'         => 'System',
-            'value'        => 'https://my.thepowerhost.in/modules/addons/domain_reseller/api.php',
-            'Size'         => '50',
-            'Default'      => '',
-            'Description'  => 'Enter the full API URL',
+            'Type' => 'text',
+            'Value' => 'https://my.thepowerhost.in/modules/addons/domain_reseller/api.php',
+
+            'Default' => 'https://my.thepowerhost.in/modules/addons/domain_reseller/api.php',
+            'Description' => 'Enter the full API URL (e.g., https://my.thepowerhost.in/modules/addons/domain_reseller/api.php)',
         ],
         'ApiKey' => [
             'FriendlyName' => 'API Key',
@@ -93,8 +97,8 @@ function domainreseller_getConfigArray() {
             'FriendlyName' => 'Enable Default Contact',
             'Type'         => 'yesno',
             'Description'  => 'When enabled, the Default Contact details below will '
-                            . 'be sent to the registry for all domain registrations '
-                            . 'and transfers instead of the customer\'s own details.',
+                . 'be sent to the registry for all domain registrations '
+                . 'and transfers instead of the customer\'s own details.',
         ],
         'DefaultFirstname' => [
             'FriendlyName' => 'Default First Name',
@@ -181,9 +185,10 @@ function domainreseller_getConfigArray() {
 // Returns the default contact array when the toggle is on, or the
 // customer's own data otherwise.
 // ─────────────────────────────────────────────────────────────────────────────
-function domainreseller_resolveContact($params) {
+function domainreseller_resolveContact($params)
+{
     $useDefault = isset($params['EnableDefaultContact'])
-               && $params['EnableDefaultContact'] === 'on';
+        && $params['EnableDefaultContact'] === 'on';
 
     if ($useDefault) {
         return [
@@ -220,7 +225,8 @@ function domainreseller_resolveContact($params) {
 // ─────────────────────────────────────────────────────────────────────────────
 // Core API caller
 // ─────────────────────────────────────────────────────────────────────────────
-function domainreseller_api_call($params, $endpoint, $method = 'GET', $data = []) {
+function domainreseller_api_call($params, $endpoint, $method = 'GET', $data = [])
+{
     $apiUrl    = isset($params['ApiUrl'])    ? trim($params['ApiUrl'])    : '';
     $apiKey    = isset($params['ApiKey'])    ? trim($params['ApiKey'])    : '';
     $apiSecret = isset($params['ApiSecret']) ? trim($params['ApiSecret']) : '';
@@ -329,7 +335,8 @@ function domainreseller_api_call($params, $endpoint, $method = 'GET', $data = []
 // ─────────────────────────────────────────────────────────────────────────────
 // Nameservers
 // ─────────────────────────────────────────────────────────────────────────────
-function domainreseller_GetNameservers($params) {
+function domainreseller_GetNameservers($params)
+{
     $result = domainreseller_api_call($params, 'nameservers', 'GET', [
         'domain' => $params['sld'] . '.' . $params['tld'],
     ]);
@@ -348,7 +355,8 @@ function domainreseller_GetNameservers($params) {
     return $nameservers;
 }
 
-function domainreseller_SaveNameservers($params) {
+function domainreseller_SaveNameservers($params)
+{
     $nameservers = [];
     for ($i = 1; $i <= 5; $i++) {
         if (!empty($params['ns' . $i])) {
@@ -371,7 +379,8 @@ function domainreseller_SaveNameservers($params) {
 // ─────────────────────────────────────────────────────────────────────────────
 // Registrar lock
 // ─────────────────────────────────────────────────────────────────────────────
-function domainreseller_GetRegistrarLock($params) {
+function domainreseller_GetRegistrarLock($params)
+{
     $result = domainreseller_api_call($params, 'info', 'GET', [
         'domain' => $params['sld'] . '.' . $params['tld'],
     ]);
@@ -383,7 +392,8 @@ function domainreseller_GetRegistrarLock($params) {
     return $result['locked'] ? 'locked' : 'unlocked';
 }
 
-function domainreseller_SaveRegistrarLock($params) {
+function domainreseller_SaveRegistrarLock($params)
+{
     $lockStatus = $params['lockenabled'] === 'locked' ? 1 : 0;
 
     $result = domainreseller_api_call($params, 'lock', 'POST', [
@@ -402,7 +412,8 @@ function domainreseller_SaveRegistrarLock($params) {
 // Register a domain
 // Uses default contact when EnableDefaultContact = on
 // ─────────────────────────────────────────────────────────────────────────────
-function domainreseller_RegisterDomain($params) {
+function domainreseller_RegisterDomain($params)
+{
     $nameservers = [];
     for ($i = 1; $i <= 5; $i++) {
         if (!empty($params['ns' . $i])) {
@@ -433,7 +444,8 @@ function domainreseller_RegisterDomain($params) {
 // Transfer a domain
 // Uses default contact when EnableDefaultContact = on
 // ─────────────────────────────────────────────────────────────────────────────
-function domainreseller_TransferDomain($params) {
+function domainreseller_TransferDomain($params)
+{
     $nameservers = [];
     for ($i = 1; $i <= 5; $i++) {
         if (!empty($params['ns' . $i])) {
@@ -464,7 +476,8 @@ function domainreseller_TransferDomain($params) {
 // ─────────────────────────────────────────────────────────────────────────────
 // Renew
 // ─────────────────────────────────────────────────────────────────────────────
-function domainreseller_RenewDomain($params) {
+function domainreseller_RenewDomain($params)
+{
     $result = domainreseller_api_call($params, 'renew', 'POST', [
         'domain'    => $params['sld'] . '.' . $params['tld'],
         'regperiod' => $params['regperiod'],
@@ -481,7 +494,8 @@ function domainreseller_RenewDomain($params) {
 // ─────────────────────────────────────────────────────────────────────────────
 // EPP Code
 // ─────────────────────────────────────────────────────────────────────────────
-function domainreseller_GetEPPCode($params) {
+function domainreseller_GetEPPCode($params)
+{
     $result = domainreseller_api_call($params, 'epp', 'GET', [
         'domain' => $params['sld'] . '.' . $params['tld'],
     ]);
@@ -496,7 +510,8 @@ function domainreseller_GetEPPCode($params) {
 // ─────────────────────────────────────────────────────────────────────────────
 // Sync
 // ─────────────────────────────────────────────────────────────────────────────
-function domainreseller_Sync($params) {
+function domainreseller_Sync($params)
+{
     $result = domainreseller_api_call($params, 'info', 'GET', [
         'domain' => $params['sld'] . '.' . $params['tld'],
     ]);
@@ -523,7 +538,8 @@ function domainreseller_Sync($params) {
 // ─────────────────────────────────────────────────────────────────────────────
 // Domain availability check
 // ─────────────────────────────────────────────────────────────────────────────
-function domainreseller_CheckAvailability($params) {
+function domainreseller_CheckAvailability($params)
+{
     $results = new ResultsList();
 
     foreach ($params['tlds'] as $tld) {
@@ -554,7 +570,8 @@ function domainreseller_CheckAvailability($params) {
 // ─────────────────────────────────────────────────────────────────────────────
 // TLD pricing
 // ─────────────────────────────────────────────────────────────────────────────
-function domainreseller_GetTldPricing($params) {
+function domainreseller_GetTldPricing($params)
+{
     $result = domainreseller_api_call($params, 'tlds', 'GET');
 
     if (isset($result['error'])) {
@@ -586,7 +603,8 @@ function domainreseller_GetTldPricing($params) {
 // ─────────────────────────────────────────────────────────────────────────────
 // Balance
 // ─────────────────────────────────────────────────────────────────────────────
-function domainreseller_GetBalance($params) {
+function domainreseller_GetBalance($params)
+{
     $result = domainreseller_api_call($params, 'balance', 'GET');
 
     if (isset($result['error'])) {
@@ -602,7 +620,8 @@ function domainreseller_GetBalance($params) {
 // ─────────────────────────────────────────────────────────────────────────────
 // Client area
 // ─────────────────────────────────────────────────────────────────────────────
-function domainreseller_ClientArea($params) {
+function domainreseller_ClientArea($params)
+{
     if (empty($params['ApiUrl']) || empty($params['ApiKey']) || empty($params['ApiSecret'])) {
         return [
             'templatefile' => 'clientarea',
@@ -636,14 +655,16 @@ function domainreseller_ClientArea($params) {
 // ─────────────────────────────────────────────────────────────────────────────
 // Admin custom buttons
 // ─────────────────────────────────────────────────────────────────────────────
-function domainreseller_AdminCustomButtonArray($params) {
+function domainreseller_AdminCustomButtonArray($params)
+{
     return [
         'Test Connection' => 'TestConnection',
         'Check Balance'   => 'CheckBalance',
     ];
 }
 
-function domainreseller_TestConnection($params) {
+function domainreseller_TestConnection($params)
+{
     $result = domainreseller_api_call($params, 'balance', 'GET');
 
     if (isset($result['error'])) {
@@ -653,7 +674,8 @@ function domainreseller_TestConnection($params) {
     return ['status' => 'success', 'message' => 'Connection successful! Balance: $' . $result['balance']];
 }
 
-function domainreseller_CheckBalance($params) {
+function domainreseller_CheckBalance($params)
+{
     $result = domainreseller_api_call($params, 'balance', 'GET');
 
     if (isset($result['error'])) {
